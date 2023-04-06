@@ -76,6 +76,11 @@ class AuthController extends ValidatePetugas {
         return $connect->affected_rows;
     }
 
+    // function auth petugas
+    public function authPetugas($session) {
+        return $session;
+    }
+
         // function upload foto profile
         public function upload_foto_profile($files) {
             $namaFile = $files["foto_profile"]["name"];

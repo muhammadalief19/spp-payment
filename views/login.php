@@ -14,6 +14,7 @@ if(isset($_SESSION["login"])) {
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../dist/output.css">
+    <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body class="w-full bg-gray-50">
     <div class="w-full h-screen flex justify-center items-center">
