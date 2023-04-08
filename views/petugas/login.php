@@ -4,21 +4,21 @@ if(isset($_SESSION["login"])) {
     header("Location:index.php");
 }
 
-include_once "../../Controller/AuthController.php";
+include_once "../../Controller/AdminController.php";
 
-$AuthController = new AuthController;
+$AdminController = new AdminController();
 
 $on = false;
 $off = false;
 $message = '';
 if(isset($_POST["login"])) {
-    $result = $AuthController->loginPetugas($_POST);
+    $result = $AdminController->loginPetugas($_POST);
 
     if($result > 0) {
         header("Location:index.php");
     } else {
      $off = true;
-     $message = $AuthController->getError();
+     $message = $AdminController->getError();
     }
 
  }

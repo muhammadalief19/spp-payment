@@ -39,7 +39,7 @@ if(isset($_POST["logout"])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../../dist/output.css">
 </head>
-<body class="w-full overflow-x-hidden text-gray-700">
+<body class="w-full overflow-x-hidden text-gray-700 relative">
      <!-- navbar -->
      <navbar class="w-full flex gap-16 px-10 h-24 items-center fixed" id="navbar">
         <div class="flex gap-5 h-auto items-center">
@@ -79,53 +79,55 @@ if(isset($_POST["logout"])) {
     <!-- navbar -->
     <!-- main -->
     <section class="w-full h-screen flex flex-col justify-center items-center pt-24 gap-7">
-        <p class="text-3xl font-bold">SISWA</p>
-        <div class="w-[85%]">
-            <a href="add-siswa.php" class="py-3 bg-sky-800 px-7 rounded text-gray-100 font-semibold">
-                Tambah Siswa
-            </a>
-        </div>
-        <div class="w-[85%] flex flex-col gap-4">
-            <div class="w-full grid grid-cols-3 gap-5">
-                <!-- card profile -->
-                <div class="w-full grid grid-rows-3 bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class=" px-6 py-4 row-span-2 gap-3 flex h-auto items-center">
-                    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
-                    <div class="flex flex-col gap-[2px]">
-                    <h3 class="text-xl font-semibold text-gray-900">John Doe</h3>
-                    <p class="text-base font-medium text-gray-600">312124124</p>
-                    <p class="text-sm  text-gray-600">XII RPL 2</p>
-                    <div class="w-full flex gap-3">
-                        <div class="">
-                            <a href="#" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-red-600 rounded-full">Delete</a>
-                        </div>
-                        <div class="">
-                            <a href="#" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-green-700 rounded-full">Update</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="bg-gray-200 px-6 py-3">
-                    <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-gray-900">Email</span>
-                    <span class="text-sm text-gray-600">johndoe@example.com</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Phone</span>
-                    <span class="text-sm text-gray-600">+1 555-555-1234</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Address</span>
-                    <span class="text-sm text-gray-600">Pajagalan</span>
-                    </div>
-                </div>
-                </div>
-                <!-- card profile -->
+    <div class="flex flex-col justify-center items-center w-full h-full">
+        <p class="text-2xl font-bold">Tambah Siswa</p>
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+            <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="nama">
+                Nama Lengkap
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama" type="text" placeholder="Masukkan nama lengkap">
             </div>
+            <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="nisn">
+                NISN
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nisn" type="text" placeholder="Masukkan NISN">
+            </div>
+            <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="kelas">
+                Kelas
+            </label>
+            <div class="relative">
+                <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option>Pilih kelas</option>
+                <option>X</option>
+                <option>XI</option>
+                <option>XII</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M14.293 5.293a1 1 0 0 0-1.414 0L10 8.586 6.707 5.293a1 1 0 0 0-1.414 1.414l3.586 3.586a1 1 0 0 0 1.414 0l3.586-3.586a1 1 0 0 0 0-1.414z"/>
+                </svg>
+                </div>
+            </div>
+            </div>
+            <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="alamat">
+                Alamat
+            </label>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="alamat" placeholder="Masukkan alamat"></textarea>
+            </div>
+            <div class="mb-4">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Simpan
+            </button>
+            </div>
+        </form>
         </div>
+
     </section>
     <!-- main -->
-
         <!-- footer -->
         <footer class="bg-gray-900 text-white p-4 mt-8">
             <div class="max-w-7xl mx-auto flex justify-between h-auto items-center">

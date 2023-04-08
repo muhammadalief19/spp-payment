@@ -4,10 +4,10 @@ if(!isset($_SESSION["login"])) {
     header("Location:login.php");
 }
 
-require_once "../../Controller/AuthController.php";
+require_once "../../Controller/AdminController.php";
 
-$AuthController = new AuthController;
-$user = $AuthController->authPetugas($_SESSION);
+$AdminController = new AdminController;
+$user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
         # code...
@@ -23,6 +23,10 @@ switch ($user["role"]) {
         # code...
         break;
 }
+
+if(isset($_POST["logout"])) {
+    $AdminController->logout("login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,9 +36,9 @@ switch ($user["role"]) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../dist/output.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@^3.4.1/dist/css/glide.core.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@^3.4.1/dist/css/glide.theme.min.css">
-    <link rel="stylesheet" href="../../dist/output.css">
 </head>
 <body class="w-full overflow-x-hidden relative text-gray-700">
     <!-- navbar -->
@@ -47,7 +51,7 @@ switch ($user["role"]) {
         </div>
         <ul class="flex gap-7">
             <li class="">
-                <a href="" class="">Dashboard</a>
+                <a href="index.php" class="">Dashboard</a>
             </li>
             <li class="">
                 <a href="" class="">Transaksi</a>
@@ -56,17 +60,21 @@ switch ($user["role"]) {
                 <a href="" class="">Petugas</a>
             </li>
             <li class="">
-                <a href="" class="">Siswa</a>
+                <a href="siswa/siswa.php" class="">Siswa</a>
             </li>
             <li class="">
-                <a href="" class="">Kelas</a>
+                <a href="kelas/kelas.php" class="">Kelas</a>
             </li>
             <li class="">
-                <a href="" class="">Komptensi Keahlian</a>
+                <a href="komptensi/kompetensi.php" class="">Komptensi Keahlian</a>
             </li>
         </ul>
         <div class="flex-1 flex justify-end">
-            <a href="" class="">Logout</a>
+            <form action="" method="post">
+                <button type="submit" name="logout">
+                    Logout
+                </button>
+            </form>
         </div>
     </navbar>
     <!-- navbar -->
@@ -100,23 +108,23 @@ switch ($user["role"]) {
             <ul class="glide__slides">
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-6.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold">Siswa</a href="">
+                <a href="siswa/siswa.php" class="text-lg font-semibold hover:text-gray-500">Siswa</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-7.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold">History transaksi</a href="">
+                <a href="" class="text-lg font-semibold hover:text-gray-500">History transaksi</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-8.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold">Petugas</a href="">
+                <a href="" class="text-lg font-semibold hover:text-gray-500">Petugas</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-9.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold">SPP</a href="">
+                <a href="" class="text-lg font-semibold hover:text-gray-500">SPP</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/illustration-2.svg" alt="" class="">  
-                <a href="" class="text-lg font-semibold">Kelas</a href="">
+                <a href="" class="text-lg font-semibold hover:text-gray-500">Kelas</a href="">
             </li>
             </ul>
         </div>
@@ -144,7 +152,7 @@ switch ($user["role"]) {
       <img src="../../public/assets/icon-web.svg" alt="Logo" class="w-12 h-12 mr-2">
       <h1 class="text-xl font-bold">Admin Pembayaran SPP</h1>
     </div>
-    <p class="text-sm">&copy; 2023 SMAN 1 Example</p>
+    <p class="text-sm">&copy; 2023 SMKN 1 Kreal</p>
   </div>
 </footer>
 
@@ -154,8 +162,9 @@ switch ($user["role"]) {
     <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide"></script>
     <script>
     new Glide('#slider', {
-        type: 'slider',
+        type: 'carousel',
         perView: 2.5,
+        autoplay: 2000,
         gap: 30,
         peek: { before: 50, after: 50 },
         breakpoints: {

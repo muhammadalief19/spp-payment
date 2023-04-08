@@ -1,23 +1,9 @@
 <?php 
-require_once "Database.php";
-require_once "ValidatePetugas.php";
+require_once"Database.php";
+require_once"ValidateAdmin.php";
 $db = new Database;
 $connect = $db->getConnection();
-class AuthController extends ValidatePetugas { 
-    
-    public function loginSiswa($auth) {
-        global $connect;
-        $nisn = $auth["nisn"];
-        $password = $auth["password"];
-        $result = $connect->query();
-    }
-
-    public function registrasiSiswa($data){
-        global $connect;
-        $nisn = $data["nisn"];
-        $id_kelas = $data["id_kelas"];
-        $id_spp = $data["id_spp"];
-    }
+class AdminController extends ValidateAdmin { 
 
     public function loginPetugas($data){
         global $connect;
@@ -120,5 +106,10 @@ class AuthController extends ValidatePetugas {
             move_uploaded_file($tmpName,'../../public/assets/foto-profile/'.$namaFileBaru);
         
             return $namaFileBaru;
+        }
+
+        public function logout($location) {
+        session_destroy();
+        header("Location: {$location}");
         }
 }

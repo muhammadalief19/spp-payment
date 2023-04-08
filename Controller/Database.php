@@ -1,6 +1,7 @@
 <?php 
 class Database {
-    private $hostName,$username,$password,$databaseName,$conn;
+    private $hostName,$username,$password,$databaseName;
+    public $conn;
 
     public function __construct()
     {

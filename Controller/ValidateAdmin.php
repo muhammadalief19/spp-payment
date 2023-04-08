@@ -3,7 +3,7 @@ require_once "Database.php";
 $db = new Database;
 $conn = $db->getConnection();
 
-class ValidatePetugas {
+class ValidateAdmin {
     private $error = [];
 
     public function checkNamaPetugas($name) {

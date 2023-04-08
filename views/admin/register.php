@@ -4,21 +4,21 @@ if(isset($_SESSION["login"])) {
     header("Location:index.php");
 }
 
-include_once "../../Controller/AuthController.php";
+include_once "../../Controller/AdminController.php";
 
-$AuthController = new AuthController;
+$AdminController = new AdminController;
 
 $on = false;
 $off = false;
 $message = '';
 if(isset($_POST["register"])) {
-    $result = $AuthController->registrasiAdmin($_POST);
+    $result = $AdminController->registrasiAdmin($_POST);
 
     if($result > 0) {
      $on = true;
     } else {
      $off = true;
-     $message = $AuthController->getError();
+     $message = $AdminController->getError();
     }
 
  }
@@ -33,7 +33,6 @@ if(isset($_POST["register"])) {
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../dist/output.css">
-    <link rel="stylesheet" href="../../public/css/style.css">
 </head>
 <body class="w-full bg-gray-50 relative overflow-x-hidden">
     <?php if($on) : ?>
