@@ -108,7 +108,7 @@ if(isset($_POST["logout"])) {
                 <a href="" class="">Transaksi</a>
             </li>
             <li class="">
-                <a href="" class="">Petugas</a>
+                <a href="../petugas/petugas.php" class="">Petugas</a>
             </li>
             <li class="">
                 <a href="../siswa/siswa.php" class="">Siswa</a>

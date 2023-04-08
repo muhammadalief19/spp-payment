@@ -72,7 +72,7 @@ if(isset($_POST["register"])) {
                     <label for="nama"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400               peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Nama
                     </label>
-                    <?php if($off) : ?>
+                    <?php if(isset($message["nama"])) : ?>
                     <p class="text-xs italic text-red-700"><?= $message["nama"] ?></p>
                     <?php endif ?>
                 </div>
@@ -83,7 +83,7 @@ if(isset($_POST["register"])) {
                     <label for="email"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400               peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email
                     </label>
-                    <?php if($off) : ?>
+                    <?php if(isset($message["email"])) : ?>
                     <p class="text-xs italic text-red-700"><?= $message["email"] ?></p>
                     <?php endif ?>
                 </div>
@@ -108,7 +108,7 @@ if(isset($_POST["register"])) {
                 </div>
                 <input id="dropzone-file" type="file" class="hidden" name="foto_profile"/>
                 </label>
-                <?php if($off) : ?>
+                <?php if(isset($message["image"])) : ?>
                     <p class="text-xs italic text-red-700"><?= $message["image"] ?></p>
                     <?php endif ?>
                 </div> 

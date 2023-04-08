@@ -120,11 +120,11 @@ if(isset($_POST["logout"])) {
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-9.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold hover:text-gray-500">SPP</a href="">
+                <a href="spp/spp.php" class="text-lg font-semibold hover:text-gray-500">SPP</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/illustration-2.svg" alt="" class="">  
-                <a href="" class="text-lg font-semibold hover:text-gray-500">Kelas</a href="">
+                <a href="kelas/kelas.php" class="text-lg font-semibold hover:text-gray-500">Kelas</a href="">
             </li>
             </ul>
         </div>

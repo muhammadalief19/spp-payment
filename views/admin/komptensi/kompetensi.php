@@ -131,7 +131,7 @@ if(isset($_POST["logout"])) {
                 <a href="" class="">Transaksi</a>
             </li>
             <li class="">
-                <a href="" class="">Petugas</a>
+                <a href="../petugas/petugas.php" class="">Petugas</a>
             </li>
             <li class="">
                 <a href="../siswa/siswa.php" class="">Siswa</a>
@@ -174,7 +174,7 @@ if(isset($_POST["logout"])) {
                     <tr>
                         <td class="py-4 px-6 border-b border-gray-300"><?= $num++?></td>
                         <td class="py-4 px-6 border-b border-gray-300"><?= $item["nama"] ?></td>
-
+ 
                     <td class="py-4 px-6 text-center border-b border-gray-300 flex gap-7">
                         <a href="update-kompetensi.php?id=<?= $item["id_kompetensi"] ?>" class="p-3 aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

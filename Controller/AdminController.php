@@ -49,9 +49,7 @@ class AdminController extends ValidateAdmin {
         $checkNama = $this->checkNamaPetugas($email);
 
         // proses validasi
-        if(!$foto_profile) {
-            return false;
-        } else if(!$checkEmail || !$checkNama) {
+        if(!$foto_profile || !$checkEmail || !$checkNama) {
             return false;
         }
         
