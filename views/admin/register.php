@@ -88,12 +88,15 @@ if(isset($_POST["register"])) {
                     <?php endif ?>
                 </div>
                 <!-- input password -->
-                <div class="relative w-full">
+                <div class="relative w-full flex flex-col gap-2">
                     <input id="password" name="password" type="password"
                         class="w-full h-10 text-gray-900 placeholder-transparent border-b-4 border-gray-200 peer focus:outline-none focus:border-blue-600 bg-transparent" placeholder="password" autocomplete="off"/>
                     <label for="password"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400               peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password
                     </label>
+                    <?php if(isset($message["password"])) : ?>
+                    <p class="text-xs italic text-red-700"><?= $message["password"] ?></p>
+                    <?php endif ?>
                 </div>
                 
                 <input type="hidden" name="role" value="admin">

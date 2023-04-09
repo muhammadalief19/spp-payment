@@ -1,38 +1,39 @@
-<?php 
-require_once "Database.php";
+<?php
 $db = new Database;
-$conn = $db->getConnection();
-
-class ValidateAdmin {
+$connection = $db->getConnection();
+class ValidatePetugas {
     private $error = [];
-
-    public function checkNamaPetugas($name) {
-        if(empty($name)) {
-            $this->addError('nama', 'masukkan nama terlebih dahulu');
+    public function checkNama($nama) {
+        if(empty($nama)) {
+            $this->addError('nama', 'nama wajib diisi');
             return false;
         }
-        return true;
-    }
-    
-    public function checkEmailPetugas($email) {
-        global $conn;
-        $result = $conn->query("SELECT * FROM petugas WHERE email='$email' limit 1");
-        $count = $result->num_rows;
-        if(empty($email)) {
-            $this->addError("email",'masukkan email terlebih dahulu');
-            return false;
-        } elseif($count > 0) {
-            $this->addError("email",'email tidak tersedia');
-            return false;
-        } 
+
         return true;
     }
 
-    public function checkEmailPetugasLogin($email) {
-        if(empty($email)) {
-            $this->addError("email",'masukkan email terlebih dahulu');
+    public function checkRole($role) {
+        if(empty($role)) {
+            $this->addError('role', 'role wajib diisi');
             return false;
         }
+
+        return true;
+    }
+
+    public function checkEmail($email) {
+        global $connection;
+        $query = "SELECT * FROM petugas WHERE email='$email'";
+        $result = $connection->query($query);
+        $data = $result->num_rows;
+        if(empty($email)) {
+            $this->addError('email', 'email wajib diisi');
+            return false;
+        } elseif($data > 0) {
+            $this->addError('email', 'email tidak tersedia');
+            return false;
+        }
+
         return true;
     }
 
@@ -71,13 +72,12 @@ class ValidateAdmin {
             $this->addError('password', 'password wajib diisi');
             return false;
         } elseif(strlen($password) < 8) {
-            $this->addError('password', 'password harus berisi minimal 8 karakter');
+            $this->addError('password', 'panjang password minimal 8 karakter');
             return false;
         }
 
         return true;
     }
-
 
     public function addError($index, $value){
         $this->error[$index] = $value;
@@ -87,3 +87,5 @@ class ValidateAdmin {
         return $this->error;
     }
 }
+
+?>

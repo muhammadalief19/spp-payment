@@ -5,9 +5,10 @@ if(!isset($_SESSION["login"])) {
 }
 
 require_once "../../../Controller/AdminController.php";
-require_once "../../../Controller/db-siswa/TableSiswa.php";
+require_once "../../../Controller/db-petugas/TablePetugas.php";
 
 $AdminController = new AdminController;
+$TablePetugas = new TablePetugas;
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -25,6 +26,33 @@ switch ($user["role"]) {
         break;
 }
 
+// pagination
+$limit = 3;
+$page = (isset($_GET["page"])) ? $_GET["page"] : 1;
+$pageStart = ($page > 1) ? ($page * $limit) - $limit : 0;
+
+$previous = $page - 1;
+$next = $page + 1;
+
+$data = $TablePetugas->listPetugasAll();
+$sumData = count($data);
+$sumPage = ceil($sumData / $limit);
+$num = $pageStart + 1;
+
+$petugas = $TablePetugas->listPetugas($pageStart, $limit);
+
+$success = false;
+$error = false;
+
+if(isset($_POST["delete"], $_POST["foto_profile"])) {
+    $result = $TablePetugas->deletePetugas($_POST["id_petugas"], $_POST["foto_profile"]);
+    if($result > 0) {
+        $success = true;
+    } else {
+        $error = true;
+    }
+}
+
 if(isset($_POST["logout"])) {
     $AdminController->logout("../login.php");
 }
@@ -40,6 +68,52 @@ if(isset($_POST["logout"])) {
     <link rel="stylesheet" href="../../../dist/output.css">
 </head>
 <body class="w-full overflow-x-hidden text-gray-700">
+     <!-- modal delete -->
+     <?php if($success) : ?>
+            <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50 <?= "block" ?>" id="myModal">
+            <!-- Modal -->
+            <div class="w-full z-10 inset-0 overflow-y-auto">
+            <div class="w-full flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold">Success</h2>
+                </div>
+                <div class="mb-4">
+                    <p>Petugas berhasil di hapus</p>
+                </div>
+                <div class="text-right">
+                    <a href="petugas.php" class="bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded">
+                    Alhamdulillah
+                    </a>
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            <?php elseif($error) : ?>  
+                <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50 
+                <?= "block" ?>" id="myModal">
+            <!-- Modal -->
+            <div class="w-full z-10 inset-0 overflow-y-auto">
+            <div class="w-full flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold">Error</h2>
+                </div>
+                <div class="mb-4">
+                    <p>Petugas gagal di hapus</p>
+                </div>
+                <div class="text-right">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">
+                    Subhanallah
+                    </button>
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>  
+        <?php endif; ?>
+    <!-- modal delete -->
      <!-- navbar -->
      <navbar class="w-full flex gap-16 px-10 h-24 items-center fixed" id="navbar">
         <div class="flex gap-5 h-auto items-center">
@@ -78,49 +152,49 @@ if(isset($_POST["logout"])) {
     </navbar>
     <!-- navbar -->
     <!-- main -->
-    <section class="w-full h-screen flex flex-col justify-center items-center pt-24 gap-7">
-        <p class="text-3xl font-bold">SISWA</p>
+    <section class="w-full h-screen flex flex-col justify-center items-center pt-28 gap-10">
+        <p class="text-3xl font-bold">Petugas</p>
         <div class="w-[85%]">
-            <a href="add-siswa.php" class="py-3 bg-sky-800 px-7 rounded text-gray-100 font-semibold">
-                Tambah Siswa
+            <a href="add-petugas.php" class="py-3 bg-sky-800 px-7 rounded text-gray-100 font-semibold">
+                Tambah Petugas
             </a>
         </div>
         <div class="w-[85%] flex flex-col gap-4">
-            <div class="w-full grid grid-cols-3 gap-5">
+            <div class="w-full grid grid-cols-3 gap-10">
+                <?php foreach($petugas as $data) : ?>
                 <!-- card profile -->
-                <div class="w-full grid grid-rows-3 bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class=" px-6 py-4 row-span-2 gap-3 flex h-auto items-center">
-                    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
-                    <div class="flex flex-col gap-[2px]">
-                    <h3 class="text-xl font-semibold text-gray-900">John Doe</h3>
-                    <p class="text-base font-medium text-gray-600">312124124</p>
-                    <p class="text-sm  text-gray-600">XII RPL 2</p>
-                    <div class="w-full flex gap-3">
-                        <div class="">
-                            <a href="#" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-red-600 rounded-full">Delete</a>
-                        </div>
-                        <div class="">
-                            <a href="#" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-green-700 rounded-full">Update</a>
-                        </div>
+                <div class="bg-white rounded-lg hover:shadow-neutral-700 transition-shadow duration-300 ease-in-out shadow-2xl p-8 w-full flex flex-col gap-3">
+                    <img class="w-32 h-32 rounded-full mx-auto" src="../../../public/assets/foto-profile/<?= $data["foto_profile"] ?>">
+                    <h1 class="text-2xl font-bold text-center"><?= $data["nama"] ?></h1>
+                    <p class="text-center text-gray-500"><?= $data["email"] ?></p>
+                    <p class="text-center font-semibold text-gray-500"><?= $data["role"] ?></p>
+                    <hr class="">
+                    <div class="flex justify-center">
+                        <a href="update-petugas.php?id=<?= $data["id_petugas"] ?>" class="bg-blue-700 text-white px-4 py-2 rounded mr-2">Update</a>
+                        <form action="" method="post">
+                            <input type="hidden" name="id_petugas" value="<?= $data["id_petugas"] ?>">
+                            <input type="hidden" name="foto_profile" value="<?= $data["foto_profile"] ?>">
+                            <button type="submit" name="delete" class="bg-red-700 text-white px-4 py-2 rounded mr-2">Delete</button>
+                        </form>
                     </div>
                     </div>
-                </div>
-                <div class="bg-gray-200 px-6 py-3">
-                    <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-gray-900">Email</span>
-                    <span class="text-sm text-gray-600">johndoe@example.com</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Phone</span>
-                    <span class="text-sm text-gray-600">+1 555-555-1234</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Address</span>
-                    <span class="text-sm text-gray-600">Pajagalan</span>
-                    </div>
-                </div>
-                </div>
                 <!-- card profile -->
+                <?php endforeach ?>
+            </div>
+            <div class="flex justify-center">
+                <nav class="inline-flex">
+                    <a href="?page=<?= $page-1 ?>" class="bg-gray-200 px-3 py-2 font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    < Prev
+                    </a>
+                    <?php for($i = 1; $i <= $sumPage; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="<?= ($page == $i) ? "bg-gray-900 text-gray-200" : "bg-gray-200 text-gray-900" ?>  px-3 py-2 font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    <?= $i ?>
+                    </a>
+                    <?php endfor ?>
+                    <a href="?page=<?= $page+1 ?>" class="bg-gray-200 px-3 py-2 font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Next >
+                    </a>
+                </nav>
             </div>
         </div>
     </section>

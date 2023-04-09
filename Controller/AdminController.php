@@ -42,17 +42,20 @@ class AdminController extends ValidateAdmin {
         $email = htmlspecialchars($data["email"]);
         $password = password_hash(htmlspecialchars($data["password"]), PASSWORD_DEFAULT);
         $role = htmlspecialchars($data["role"]);
-        $foto_profile = $this->upload_foto_profile($_FILES);
-
+        
         // validasi
         $checkEmail = $this->checkEmailPetugas($email);
-        $checkNama = $this->checkNamaPetugas($email);
-
+        $checkNama = $this->checkNamaPetugas($nama);
+        $checkFoto = $this->checkFoto($_FILES);
+        $checkPassword = $this->checkPassword($data["password"]);
+        
         // proses validasi
-        if(!$foto_profile || !$checkEmail || !$checkNama) {
+        if(!$checkFoto || !$checkEmail || !$checkNama || !$checkPassword) {
             return false;
         }
         
+        $foto_profile = $this->upload_foto_profile($_FILES);
+
         // query register
         $query = "INSERT INTO petugas (nama,email,password,role,foto_profile) VALUES ('$nama','$email','$password','$role','$foto_profile')"; 
         $connect->query($query);
