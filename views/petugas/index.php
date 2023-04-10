@@ -1,3 +1,33 @@
+<?php
+session_start();
+if(!isset($_SESSION["login"])) {
+    header("Location:login.php");
+}
+
+require_once"../../Controller/petugas/PetugasController.php";
+
+$PetugasController = new PetugasController;
+
+// authentication
+$user = $PetugasController->authPetugas($_SESSION);
+switch ($user["role"]) {
+    case 'admin':
+        # code...
+        header("Location: ../admin/index.php");
+        break;
+    case 'petugas':
+        break;
+        case 'siswa':
+        header("Location: ../home.php");
+        break;
+            
+        default:
+            # code...
+        break;
+}
+// authentication
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
