@@ -150,7 +150,7 @@ if(isset($_POST["logout"])) {
         <div class="flex flex-col space-y-4">
             <div class="flex flex-col space-y-1">
                 <label for="nama" class="text-lg font-semibold">Nama</label>
-                <input autocomplete="off" type="text" id="nama" name="nama" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500" value="<?= $siswa["nama"] ?>">
+                <input autocomplete="off" type="text" id="nama" name="nama" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500" value="<?= $siswa["nama_siswa"] ?>">
                 <?php if(isset($message["nama"])) : ?>
                     <p class="px-1 text-xs italic text-red-700"><?= $message["nama"] ?></p>
                 <?php endif ?>

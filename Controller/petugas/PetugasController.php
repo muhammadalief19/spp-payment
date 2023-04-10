@@ -21,7 +21,7 @@ class PetugasController extends ValidatePetugasController{
             $user = $query->fetch_assoc();
             if(password_verify($password, $user["password"])){
                 $_SESSION["login"] = true;
-                $_SESSION["id"] = $user["id"];
+                $_SESSION["id"] = $user["id_petugas"];
                 $_SESSION["nama"] = $user["nama"];
                 $_SESSION["email"] = $user["email"];
                 $_SESSION["role"] = $user["role"];
@@ -36,10 +36,20 @@ class PetugasController extends ValidatePetugasController{
 
     }
 
-        // function auth petugas
-        public function authPetugas($session) {
-            return $session;
-        }
+    // function auth petugas
+    public function authPetugas($session) {
+        return $session;
+    }
+
+    
+    public function transactionReport($id) {
+        global $connect;
+    }
+    // logout
+    public function logout($location) {
+        session_destroy();
+        header("Location: {$location}");
+    }
 }
 
 ?>

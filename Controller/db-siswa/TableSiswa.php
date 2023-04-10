@@ -75,7 +75,7 @@ class TableSiswa extends ValidateSiswa {
         $foto_profile = $this->upload_foto_profile($_FILES);
 
         // create siswa
-        $query = "INSERT INTO siswa (nisn, id_kelas, id_spp, nama, password, alamat, no_telp, foto_profile) VALUES ('$nisn', $id_kelas, $id_spp, '$nama', '$password', '$alamat', '$no_telp', '$foto_profile')";
+        $query = "INSERT INTO siswa (nisn, id_kelas, id_spp, nama_siswa, password, alamat, no_telp, foto_profile) VALUES ('$nisn', $id_kelas, $id_spp, '$nama', '$password', '$alamat', '$no_telp', '$foto_profile')";
         $conn->query($query);
 
         return $conn->affected_rows;
@@ -83,7 +83,7 @@ class TableSiswa extends ValidateSiswa {
 
     public function sppNow() {
         global $conn;
-        $year = 2023;
+        $year = date('Y');
         $query = "SELECT * FROM spp WHERE tahun=$year";
         $result = $conn->query($query);
 
@@ -173,7 +173,7 @@ class TableSiswa extends ValidateSiswa {
             }
     
             // query crate
-            $query = "UPDATE siswa SET nama='$nama', alamat='$alamat', no_telp='$no_telp', id_kelas=$id_kelas, id_spp=$id_spp, foto_profile='$foto_profile' WHERE nisn='$nisn'";
+            $query = "UPDATE siswa SET nama_siswa='$nama', alamat='$alamat', no_telp='$no_telp', id_kelas=$id_kelas, id_spp=$id_spp, foto_profile='$foto_profile' WHERE nisn='$nisn'";
             $conn->query($query);
 
             return $conn->affected_rows;

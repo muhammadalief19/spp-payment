@@ -21,7 +21,7 @@ class AdminController extends ValidateAdmin {
             $user = $query->fetch_assoc();
             if(password_verify($password, $user["password"])){
                 $_SESSION["login"] = true;
-                $_SESSION["id"] = $user["id"];
+                $_SESSION["id"] = $user["id_petugas"];
                 $_SESSION["nama"] = $user["nama"];
                 $_SESSION["email"] = $user["email"];
                 $_SESSION["role"] = $user["role"];

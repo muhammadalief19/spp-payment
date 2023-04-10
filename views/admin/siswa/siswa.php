@@ -172,7 +172,7 @@ if(isset($_POST["logout"])) {
                 <div class=" px-6 py-4 row-span-2 gap-3 flex h-auto items-center">
                     <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="../../../public/assets/foto-profile/<?= $item["foto_profile"] ?>" alt="Profile Picture">
                     <div class="flex flex-col gap-[2px]">
-                    <h3 class="text-xl font-semibold text-gray-900"><?= $item["nama"] ?></h3>
+                    <h3 class="text-xl font-semibold text-gray-900"><?= $item["nama_siswa"] ?></h3>
                     <p class="text-base font-medium text-gray-600"><?= $item["nisn"] ?></p>
                     <p class="text-sm  text-gray-600"><?= "{$item["nama_kelas"]}" ?></p>
                     <div class="w-full flex gap-3">
@@ -206,6 +206,21 @@ if(isset($_POST["logout"])) {
                 </div>
                 <!-- card profile -->
                 <?php endforeach ?>
+            </div>
+            <div class="flex justify-center">
+                <nav class="inline-flex">
+                    <a href="?page=<?= $page-1 ?>" class="bg-gray-200 px-3 py-2 font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    < Prev
+                    </a>
+                    <?php for($i = 1; $i <= $sumPage; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="<?= ($page == $i) ? "bg-gray-900 text-gray-200" : "bg-gray-200 text-gray-900" ?>  px-3 py-2 font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    <?= $i ?>
+                    </a>
+                    <?php endfor ?>
+                    <a href="?page=<?= $page+1 ?>" class="bg-gray-200 px-3 py-2 font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Next >
+                    </a>
+                </nav>
             </div>
         </div>
     </section>
