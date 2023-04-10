@@ -11,6 +11,7 @@ $AdminController = new AdminController;
 $TableSpp = new TableSpp;
 $spp = $TableSpp->findSpp($_GET["id"]);
 
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -19,14 +20,16 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
 }
+// authentication
+
 
     $success = false;
     $error = false;

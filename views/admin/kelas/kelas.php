@@ -10,6 +10,7 @@ require_once "../../../Controller/db-kelas/TableKelas.php";
 $AdminController = new AdminController;
 $TableKelas = new TableKelas;
 
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -18,14 +19,15 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
 }
+// authentication
 
     // pagination
     $limit = 3;
@@ -154,7 +156,7 @@ if(isset($_POST["logout"])) {
                 <tr>
                 <td class="py-3 px-4"><?= $num++ ?></td>
                 <td class="py-3 px-4"><?= $item["nama_kelas"] ?></td>
-                <td class="py-3 px-4"><?= $item["nama"] ?></td>
+                <td class="py-3 px-4"><?= $item["nama_kompetensi"] ?></td>
                 <td class="py-3 px-4 flex gap-5">
                 <a href="update-kelas.php?id=<?= $item["id_kelas"] ?>" class="p-3 aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

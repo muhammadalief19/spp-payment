@@ -8,6 +8,9 @@ require_once "../../../Controller/AdminController.php";
 require_once "../../../Controller/db-siswa/TableSiswa.php";
 
 $AdminController = new AdminController;
+$TableSiswa = new TableSiswa;
+$kelas = $TableSiswa->kelasAll();
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -16,18 +19,34 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
+}
+// authentication
+
+$success = false;
+$error = false;
+$message = '';
+
+if(isset($_POST["create"])) {
+    $result = $TableSiswa->createSiswa($_POST);
+    if($result) {
+        $success = true;
+    } else {
+        $error = true;
+        $message = $TableSiswa->getError();
+    }
 }
 
 if(isset($_POST["logout"])) {
     $AdminController->logout("../login.php");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +59,28 @@ if(isset($_POST["logout"])) {
     <link rel="stylesheet" href="../../../dist/output.css">
 </head>
 <body class="w-full overflow-x-hidden text-gray-700 relative">
+<?php if($success) : ?>
+    <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50" id="myModal">
+        <!-- Modal -->
+        <div class="w-full z-10 inset-0 overflow-y-auto">
+        <div class="w-full flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+            <div class="mb-4">
+                <h2 class="text-xl font-bold">SUCCESS</h2>
+            </div>
+            <div class="mb-4">
+                <p>Siswa berhasil ditambah</p>
+            </div>
+            <div class="text-right">
+                <a href="siswa.php" class="bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded">
+                Alhamdulillah
+                </a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <?php endif ?>
      <!-- navbar -->
      <navbar class="w-full flex gap-16 px-10 h-24 items-center fixed" id="navbar">
         <div class="flex gap-5 h-auto items-center">
@@ -78,51 +119,85 @@ if(isset($_POST["logout"])) {
     </navbar>
     <!-- navbar -->
     <!-- main -->
-    <section class="w-full h-screen flex flex-col justify-center items-center pt-24 gap-7">
-    <div class="flex flex-col justify-center items-center w-full h-full">
+    <section class="w-full flex flex-col justify-center items-center py-28 gap-7">
+    <div class="flex flex-col gap-7 justify-center items-center w-full h-full">
         <p class="text-2xl font-bold">Tambah Siswa</p>
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-            <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="nama">
-                Nama Lengkap
-            </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama" type="text" placeholder="Masukkan nama lengkap">
+        <form action="" method="post" class="w-1/4" enctype="multipart/form-data">
+        <div class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-1">
+                <label for="nama" class="text-lg font-semibold">Nama</label>
+                <input autocomplete="off" type="text" id="nama" name="nama" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500">
+                <?php if(isset($message["nama"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["nama"] ?></p>
+                <?php endif ?>
             </div>
-            <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="nisn">
-                NISN
-            </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nisn" type="text" placeholder="Masukkan NISN">
+
+            <div class="flex flex-col space-y-1">
+                <label for="nisn" class="text-lg font-semibold">NISN</label>
+                <input autocomplete="off" type="text" id="nisn" name="nisn" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500">
+                <?php if(isset($message["nisn"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["nisn"] ?></p>
+                <?php endif ?>
             </div>
-            <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="kelas">
-                Kelas
-            </label>
-            <div class="relative">
-                <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <option>Pilih kelas</option>
-                <option>X</option>
-                <option>XI</option>
-                <option>XII</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M14.293 5.293a1 1 0 0 0-1.414 0L10 8.586 6.707 5.293a1 1 0 0 0-1.414 1.414l3.586 3.586a1 1 0 0 0 1.414 0l3.586-3.586a1 1 0 0 0 0-1.414z"/>
-                </svg>
-                </div>
+
+            <div class="flex flex-col space-y-1">
+                <label for="password" class="text-lg font-semibold">Password</label>
+                <input autocomplete="off" type="password" id="password" name="password" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500">
+                <?php if(isset($message["password"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["password"] ?></p>
+                <?php endif ?>
             </div>
+
+            <div class="flex flex-col space-y-1">
+                <label for="alamat" class="text-lg font-semibold">Alamat</label>
+                <input autocomplete="off" type="text" id="alamat" name="alamat" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500">
+                <?php if(isset($message["alamat"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["alamat"] ?></p>
+                <?php endif ?>
             </div>
-            <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="alamat">
-                Alamat
-            </label>
-            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="alamat" placeholder="Masukkan alamat"></textarea>
+
+            <div class="flex flex-col space-y-1">
+                <label for="no_telp" class="text-lg font-semibold">No. Telp</label>
+                <input autocomplete="off" type="text" id="no_telp" name="no_telp" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500">
+                <?php if(isset($message["no_telp"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["no_telp"] ?></p>
+                <?php endif ?>
             </div>
-            <div class="mb-4">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                Simpan
-            </button>
+
+            <div class="flex flex-col space-y-1">
+				<label for="id_kelas" class="block text-gray-700 font-bold mb-2">Kelas</label>
+				<div class="relative">
+					<select name="id_kelas" id="id_kelas" class="border rounded-md py-2 px-3 w-full appearance-none">
+						<option value="" selected>Pilih kelas</option>
+                        <?php foreach($kelas as $item) : ?>
+						<option value="<?= $item["id_kelas"] ?>"> <?= "{$item["nama_kelas"]} {$item["nama_kompetensi"]}" ?> </option>
+                        <?php endforeach ?>
+					</select>
+					<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+						<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.707 6.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 10.586l4.293-4.293a1 1 0 011.414 0z"/></svg>
+					</div>
+				</div>
+                <?php if(isset($message["kelas"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["kelas"] ?></p>
+                <?php endif ?>
             </div>
+
+            <div class="flex flex-col space-y-1">
+                <p class="block text-gray-700 font-bold mb-2">Foto Profile</p>
+                <label class="block">
+                <span class="sr-only">Choose File</span>
+                <input autocomplete="off" type="file" name="foto_profile" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"/>
+                </label>
+                <?php if(isset($message["foto_profile"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["foto_profile"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" name="create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition duration-500">Submit</button>
+            </div>
+        </div>
+
         </form>
         </div>
 

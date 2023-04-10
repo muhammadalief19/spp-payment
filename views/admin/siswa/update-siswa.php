@@ -9,6 +9,8 @@ require_once "../../../Controller/db-siswa/TableSiswa.php";
 
 $AdminController = new AdminController;
 $TableSiswa = new TableSiswa;
+$kelas = $TableSiswa->kelasAll();
+$siswa = $TableSiswa->findSiswa($_GET["nisn"]);
 // authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
@@ -28,35 +30,19 @@ switch ($user["role"]) {
 }
 // authentication
 
-// pagination
-$limit = 3;
-$page = (isset($_GET["page"])) ? $_GET["page"] : 1;
-$pageStart = ($page > 1) ? ($page * $limit) - $limit : 0;
-
-$previous = $page - 1;
-$next = $page + 1;
-
-$data = $TableSiswa->listSiswaAll();
-$sumData = count($data);
-$sumPage = ceil($sumData / $limit);
-$num = $pageStart + 1;
-
-$siswa = $TableSiswa->listSiswa($pageStart, $limit);
-
-$error = false;
 $success = false;
+$error = false;
+$message = '';
 
-if(isset($_POST["delete"])) {
-    $deleted = $TableSiswa->deleteSiswa($_POST["nisn"], $_POST["foto_profile"]);
-
-    if($deleted > 0) {
+if(isset($_POST["update"])) {
+    $result = $TableSiswa->updateSiswa($_POST, $_GET["nisn"]);
+    if($result) {
         $success = true;
     } else {
         $error = true;
+        $message = $TableSiswa->getError();
     }
 }
-
-
 
 if(isset($_POST["logout"])) {
     $AdminController->logout("../login.php");
@@ -72,8 +58,8 @@ if(isset($_POST["logout"])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../../dist/output.css">
 </head>
-<body class="w-full overflow-x-hidden text-gray-700">
-      <!-- modal delete -->
+<body class="w-full overflow-x-hidden text-gray-700 relative">
+      <!-- modal update -->
       <?php if($success) : ?>
             <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50 <?= "block" ?>" id="myModal">
             <!-- Modal -->
@@ -84,7 +70,7 @@ if(isset($_POST["logout"])) {
                     <h2 class="text-xl font-bold">Success</h2>
                 </div>
                 <div class="mb-4">
-                    <p>Siswa berhasil di hapus</p>
+                    <p>Siswa berhasil di update</p>
                 </div>
                 <div class="text-right">
                     <a href="siswa.php" class="bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded">
@@ -106,7 +92,7 @@ if(isset($_POST["logout"])) {
                     <h2 class="text-xl font-bold">Error</h2>
                 </div>
                 <div class="mb-4">
-                    <p>Siswa gagal di hapus</p>
+                    <p>Siswa gagal di update</p>
                 </div>
                 <div class="text-right">
                     <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">
@@ -118,7 +104,7 @@ if(isset($_POST["logout"])) {
             </div>
             </div>  
         <?php endif; ?>
-    <!-- modal delete -->
+    <!-- modal update -->
      <!-- navbar -->
      <navbar class="w-full flex gap-16 px-10 h-24 items-center fixed" id="navbar">
         <div class="flex gap-5 h-auto items-center">
@@ -157,60 +143,76 @@ if(isset($_POST["logout"])) {
     </navbar>
     <!-- navbar -->
     <!-- main -->
-    <section class="w-full h-screen flex flex-col justify-center items-center pt-24 gap-7">
-        <p class="text-3xl font-bold">SISWA</p>
-        <div class="w-[85%]">
-            <a href="add-siswa.php" class="py-3 bg-sky-800 px-7 rounded text-gray-100 font-semibold">
-                Tambah Siswa
-            </a>
-        </div>
-        <div class="w-[85%] flex flex-col gap-4">
-            <div class="w-full grid grid-cols-3 gap-5">
-                <?php foreach($siswa as $item) : ?>
-                <!-- card profile -->
-                <div class="w-full grid grid-rows-3 bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class=" px-6 py-4 row-span-2 gap-3 flex h-auto items-center">
-                    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="../../../public/assets/foto-profile/<?= $item["foto_profile"] ?>" alt="Profile Picture">
-                    <div class="flex flex-col gap-[2px]">
-                    <h3 class="text-xl font-semibold text-gray-900"><?= $item["nama"] ?></h3>
-                    <p class="text-base font-medium text-gray-600"><?= $item["nisn"] ?></p>
-                    <p class="text-sm  text-gray-600"><?= "{$item["nama_kelas"]}" ?></p>
-                    <div class="w-full flex gap-3">
-                        <div class="">
-                            <form action="" method="post">
-                                <input type="hidden" name="nisn" value="<?= $item["nisn"] ?>">
-                                <input type="hidden" name="foto_profile" value="<?= $item["foto_profile"] ?>">
-                                <button type="submit" name="delete" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-red-600 rounded-full">Delete</button>
-                            </form>
-                        </div>
-                        <div class="">
-                            <a href="update-siswa.php?nisn=<?= $item["nisn"] ?>" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-green-700 rounded-full">Update</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="bg-gray-200 px-6 py-3">
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Kompetensi Keahlian</span>
-                    <span class="text-sm text-gray-600"><?= $item["nama_kompetensi"] ?></span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Phone</span>
-                    <span class="text-sm text-gray-600"><?= $item["no_telp"] ?></span>
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                    <span class="text-sm font-medium text-gray-900">Address</span>
-                    <span class="text-sm text-gray-600"><?= $item["alamat"] ?></span>
-                    </div>
-                </div>
-                </div>
-                <!-- card profile -->
-                <?php endforeach ?>
+    <section class="w-full flex flex-col justify-center items-center py-28 gap-7">
+    <div class="flex flex-col gap-7 justify-center items-center w-full h-full">
+        <p class="text-2xl font-bold">Update Siswa</p>
+        <form action="" method="post" class="w-1/4" enctype="multipart/form-data">
+        <div class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-1">
+                <label for="nama" class="text-lg font-semibold">Nama</label>
+                <input autocomplete="off" type="text" id="nama" name="nama" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500" value="<?= $siswa["nama"] ?>">
+                <?php if(isset($message["nama"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["nama"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="flex flex-col space-y-1">
+                <label for="alamat" class="text-lg font-semibold">Alamat</label>
+                <input autocomplete="off" type="text" id="alamat" name="alamat" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500" value="<?= $siswa["alamat"] ?>">
+                <?php if(isset($message["alamat"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["alamat"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="flex flex-col space-y-1">
+                <label for="no_telp" class="text-lg font-semibold">No. Telp</label>
+                <input autocomplete="off" type="text" id="no_telp" name="no_telp" class="border-b-2 border-gray-400 focus:outline-none focus:border-green-500 transition duration-500" value="<?= $siswa["no_telp"] ?>">
+                <?php if(isset($message["no_telp"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["no_telp"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="flex flex-col space-y-1">
+				<label for="id_kelas" class="block text-gray-700 font-bold mb-2">Kelas</label>
+				<div class="relative">
+					<select name="id_kelas" id="id_kelas" class="border rounded-md py-2 px-3 w-full appearance-none">
+						<option value="" selected>Pilih kelas</option>
+                        <?php foreach($kelas as $item) : ?>
+						<option value="<?= $item["id_kelas"] ?>" <?= ($siswa["id_kelas"] === $item["id_kelas"]) ? "selected" : "" ?> > <?= "{$item["nama_kelas"]} {$item["nama_kompetensi"]}" ?> </option>
+                        <?php endforeach ?>
+					</select>
+					<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+						<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.707 6.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 10.586l4.293-4.293a1 1 0 011.414 0z"/></svg>
+					</div>
+				</div>
+                <?php if(isset($message["kelas"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["kelas"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <input type="hidden" name="foto_lama" value="<?= $siswa["foto_profile"] ?>">
+
+            <div class="flex flex-col space-y-1">
+                <p class="block text-gray-700 font-bold mb-2">Foto Profile</p>
+                <label class="block">
+                <span class="sr-only">Choose File</span>
+                <input autocomplete="off" type="file" name="foto_profile" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"/>
+                </label>
+                <?php if(isset($message["foto_profile"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $message["foto_profile"] ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" name="update" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition duration-500">Submit</button>
             </div>
         </div>
+
+        </form>
+        </div>
+
     </section>
     <!-- main -->
-
         <!-- footer -->
         <footer class="bg-gray-900 text-white p-4 mt-8">
             <div class="max-w-7xl mx-auto flex justify-between h-auto items-center">

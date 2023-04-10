@@ -22,14 +22,14 @@ switch ($user["role"]) {
         header("Location: ../petugas/index.php");
         break;
         case 'siswa':
-            # code...
-            break;
+        header("Location: ../home.php");
+        break;
             
-            default:
+        default:
             # code...
-            break;
-        }
-        // authentication
+        break;
+}
+// authentication
 
     if(isset($_POST["delete"])) {
         $deleted = $TableSpp->deleteSpp($_POST["id_spp"]);

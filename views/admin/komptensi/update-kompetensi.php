@@ -9,6 +9,7 @@ require_once"../../../Controller/db-kompetensi/TableKomptensi.php";
 
 $AdminController = new AdminController;
 $TableKompetensi =  new TableKompetensi;
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -17,14 +18,15 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
 }
+// authentication
 
 $kompetensi = $TableKompetensi->findKompetensi($_GET["id"]);
 
@@ -146,7 +148,7 @@ if(isset($_POST["logout"])) {
             <label class="block text-gray-700 font-bold mb-2" for="nama">
                 Nama Kompetensi
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama" name="nama" type="text" value="<?= $kompetensi["nama"] ?>" placeholder="Masukkan nama lengkap">
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nama" name="nama" type="text" value="<?= $kompetensi["nama_kompetensi"] ?>" placeholder="Masukkan nama ">
             <?php if(isset($msg["nama"])) : ?>
             <p class="text-xs italic text-red-700"><?= $msg["nama"] ?></p>
             <?php endif; ?>

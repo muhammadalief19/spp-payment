@@ -13,6 +13,7 @@ $TableKompetensi = new TableKompetensi;
 $TableKelas = new TableKelas;
 $kompetensi = $TableKompetensi->kompetensiAll();
 
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -21,14 +22,15 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
 }
+// authentication
 
 // validasi untuk mengecek apakah proses created success atau belum
 $error = false;
@@ -173,7 +175,7 @@ if(isset($_POST["logout"])) {
                     <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_kompetensi" name="id_kompetensi">
                         <option value="0">-- Pilih Kompetensi Keahlian --</option>
                         <?php foreach($kompetensi as $item) : ?>
-                        <option value="<?= $item["id_kompetensi"] ?>"><?= $item["nama"] ?></option>
+                        <option value="<?= $item["id_kompetensi"] ?>"><?= $item["nama_kompetensi"] ?></option>
                         <?php endforeach ?>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">

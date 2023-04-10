@@ -18,7 +18,7 @@ class TableKompetensi extends ValidateKompetensi {
     public function createKompetensi($data) {
         global $connection;
         $nama = htmlspecialchars($data["nama"]);
-        $query = "INSERT INTO kompetensi_keahlian (nama) VALUES ('$nama')";
+        $query = "INSERT INTO kompetensi_keahlian (nama_kompetensi) VALUES ('$nama')";
         $validateName = $this->validateNama($nama);
         if(!$validateName) {
             return false;
@@ -31,7 +31,7 @@ class TableKompetensi extends ValidateKompetensi {
     public function updateKompetensi($data,$id) {
         global $connection;
         $nama = htmlspecialchars($data["nama"]);
-        $query = "UPDATE kompetensi_keahlian SET nama='$nama' WHERE id_kompetensi=$id";
+        $query = "UPDATE kompetensi_keahlian SET nama_kompetensi='$nama' WHERE id_kompetensi=$id";
         $validateName = $this->validateNama($nama);
         if(!$validateName) {
             return false;

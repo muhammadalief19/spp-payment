@@ -9,6 +9,7 @@ require_once "../../../Controller/db-kompetensi/TableKomptensi.php";
 
 $AdminController = new AdminController;
 $TableKompetensi = new TableKompetensi;
+// authentication
 $user = $AdminController->authPetugas($_SESSION);
 switch ($user["role"]) {
     case 'admin':
@@ -17,14 +18,15 @@ switch ($user["role"]) {
     case 'petugas':
         header("Location: ../petugas/index.php");
         break;
-    case 'siswa':
-        # code...
+        case 'siswa':
+        header("Location: ../home.php");
         break;
-    
-    default:
-        # code...
+            
+        default:
+            # code...
         break;
 }
+// authentication
 
 // pagination
 $limit = 3;
@@ -173,7 +175,7 @@ if(isset($_POST["logout"])) {
                     <?php foreach($kompetensi as $item): ?>
                     <tr>
                         <td class="py-4 px-6 border-b border-gray-300"><?= $num++?></td>
-                        <td class="py-4 px-6 border-b border-gray-300"><?= $item["nama"] ?></td>
+                        <td class="py-4 px-6 border-b border-gray-300"><?= $item["nama_kompetensi"] ?></td>
  
                     <td class="py-4 px-6 text-center border-b border-gray-300 flex gap-7">
                         <a href="update-kompetensi.php?id=<?= $item["id_kompetensi"] ?>" class="p-3 aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-full">
