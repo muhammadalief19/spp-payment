@@ -16,17 +16,38 @@ window.onscroll = function () {
 };
 
 // menu slider
-new Glide(".glide", {
-  type: "carousel",
-  perView: 3,
-  gap: 30,
-  peek: { before: 50, after: 50 },
-  breakpoints: {
-    768: {
-      perView: 2,
-    },
-    480: {
-      perView: 1,
-    },
-  },
-}).mount();
+$(function () {
+  // define variables
+  var sliderContainer = $(".slider-container"),
+    sliderTrack = $(".slider-track"),
+    sliderSlides = $(".slider-slide"),
+    sliderNavItems = $(".slider-nav-item"),
+    numSlides = sliderSlides.length,
+    currentSlide = 0;
+
+  // initialize slider
+  sliderNavItems.eq(currentSlide).addClass("bg-white");
+  sliderTrack.css("transform", "translateX(0)");
+
+  // handle slider navigation
+  sliderNavItems.on("click", function () {
+    var navIndex = $(this).index();
+    sliderNavItems.eq(currentSlide).removeClass("bg-white");
+    $(this).addClass("bg-white");
+    sliderTrack.css("transform", "translateX(" + -navIndex * 100 + "%)");
+    currentSlide = navIndex;
+  });
+
+  // handle slider autoplay
+  function autoplay() {
+    setInterval(function () {
+      var nextSlide = (currentSlide + 1) % numSlides;
+      sliderNavItems.eq(currentSlide).removeClass("bg-white");
+      sliderNavItems.eq(nextSlide).addClass("bg-white");
+      sliderTrack.css("transform", "translateX(" + -nextSlide * 100 + "%)");
+      currentSlide = nextSlide;
+    }, 5000);
+  }
+
+  autoplay();
+});

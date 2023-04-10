@@ -27,6 +27,8 @@ switch ($user["role"]) {
 }
 // authentication
 
+$transaksi = $PetugasController->transactionReport($user["id"]);
+
 // logout
 if(isset($_POST["logout"])) {
   $PetugasController->logout("login.php");
@@ -79,7 +81,7 @@ $page = "index";
 
     <!-- Main Content -->
     <div class="pl-64 w-full flex-col">
-    <div class="p-7 w-full h-screen">
+    <div class="p-7 w-full flex flex-col gap-10">
         <div class="w-full grid grid-cols-3 gap-6 text-white">
           <div class="w-full rounded-xl bg-gray-800 aspect-square shadow-2xl hover:shadow-gray-500 transition-all duration-500 ease-in-out p-5 flex flex-col gap-3 relative overflow-x-hidden">
             <img src="../../public/assets/illustration-3.svg" alt="" class="absolute w-1/2 -top-12 z-0 -right-14">
@@ -123,6 +125,25 @@ $page = "index";
                   <img src="../../public/assets/3d-illustration-10.png" alt="" class="w-full">
                 </div>
             </div>
+          </div>
+        </div>
+        <div class="w-full flex flex-col items-center gap-6">
+          <p class="text-4xl font-bold">Activity</p>
+          <div class="w-3/4 grid grid-cols-3 gap-7">
+            <?php foreach($transaksi as $item) : ?>
+          <div class="w-full mx-auto bg-white shadow-2xl rounded-lg overflow-hidden">
+              <div class="">
+                <div class="p-7 flex flex-col gap-4">
+                  <p class="text-xl leading-tight text-center font-semibold">Payment</p>
+                  <img src="../../public/assets/foto-profile/<?= $item["foto_profile_siswa"]?>" alt="" class="">
+                  <p class="text-sm leading-tight text-gray-600">Name: <?= $item["nama_siswa"] ?></p>
+                  <p class="text-sm leading-tight text-gray-600">Date: <?= $item["tgl_bayar"] ?></p>
+                  <p class="text-sm leading-tight text-gray-600">Amount: RP. <?= $item["nominal"] ?></p>
+                  <p class="text-sm leading-tight text-gray-600">Status: <span class="px-5 py-1 rounded-xl bg-green-300 text-green-700 font-semibold"> <?= $item["status"] ?></span></p>
+                </div>
+              </div>
+          </div>
+          <?php endforeach; ?>
           </div>
         </div>
     </div>
@@ -181,6 +202,8 @@ $page = "index";
       const newSidebarWidth = sidebar.offsetWidth;
       mainContent.style.marginLeft = newSidebarWidth + 'px';
     });
+
+    
   </script>
 </body>
 </html>

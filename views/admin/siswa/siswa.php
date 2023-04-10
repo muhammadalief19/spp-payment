@@ -170,7 +170,7 @@ if(isset($_POST["logout"])) {
                 <!-- card profile -->
                 <div class="w-full grid grid-rows-3 bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class=" px-6 py-4 row-span-2 gap-3 flex h-auto items-center">
-                    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="../../../public/assets/foto-profile/<?= $item["foto_profile"] ?>" alt="Profile Picture">
+                    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="../../../public/assets/foto-profile/<?= $item["foto_profile_siswa"] ?>" alt="Profile Picture">
                     <div class="flex flex-col gap-[2px]">
                     <h3 class="text-xl font-semibold text-gray-900"><?= $item["nama_siswa"] ?></h3>
                     <p class="text-base font-medium text-gray-600"><?= $item["nisn"] ?></p>
@@ -179,7 +179,7 @@ if(isset($_POST["logout"])) {
                         <div class="">
                             <form action="" method="post">
                                 <input type="hidden" name="nisn" value="<?= $item["nisn"] ?>">
-                                <input type="hidden" name="foto_profile" value="<?= $item["foto_profile"] ?>">
+                                <input type="hidden" name="foto_profile" value="<?= $item["foto_profile_siswa"] ?>">
                                 <button type="submit" name="delete" class="inline-block px-3 py-1 text-sm font-semibold text-gray-100 leading-none bg-red-600 rounded-full">Delete</button>
                             </form>
                         </div>

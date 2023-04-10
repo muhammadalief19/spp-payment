@@ -44,6 +44,15 @@ class PetugasController extends ValidatePetugasController{
     
     public function transactionReport($id) {
         global $connect;
+        $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp WHERE transaksi.id_petugas=$id";
+        $result = $connect->query($query);
+        $transaksi = [];
+
+        while($data = $result->fetch_assoc()) {
+            $transaksi[] = $data;
+        }
+
+        return $transaksi;
     }
     // logout
     public function logout($location) {

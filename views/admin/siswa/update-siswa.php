@@ -190,7 +190,7 @@ if(isset($_POST["logout"])) {
                 <?php endif ?>
             </div>
 
-            <input type="hidden" name="foto_lama" value="<?= $siswa["foto_profile"] ?>">
+            <input type="hidden" name="foto_lama" value="<?= $siswa["foto_profile_siswa"] ?>">
 
             <div class="flex flex-col space-y-1">
                 <p class="block text-gray-700 font-bold mb-2">Foto Profile</p>
