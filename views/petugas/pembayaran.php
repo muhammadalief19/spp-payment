@@ -42,10 +42,6 @@ if(isset($_POST["bayar"])) {
     } else {
         $error = true;
         $msg = $TransaksiController->getError();
-        var_dump($msg);
-        var_dump($_POST);
-        var_dump($_FILES);
-        die();
     }
 }
 // logout
@@ -65,7 +61,73 @@ $page = "payment";
     <link rel="stylesheet" href="../../dist/output.css">
 </head>
 
-<body class="bg-gray-200 w-full">
+<body class="bg-gray-200 w-full relative">
+<?php if($success) : ?>
+    <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50" id="myModal">
+        <!-- Modal -->
+        <div class="w-full z-10 inset-0 overflow-y-auto">
+        <div class="w-full flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+            <div class="mb-4">
+                <h2 class="text-xl font-bold">SUCCESS</h2>
+            </div>
+            <div class="mb-4">
+                <p>Transaksi pembayaran suksess</p>
+            </div>
+            <div class="text-right">
+                <a href="index.php" class="bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded">
+                Alhamdulillah
+                </a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <?php elseif(isset($msg["payment"])) : ?>  
+                <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50 
+                <?= "block" ?>" id="myModal">
+            <!-- Modal -->
+            <div class="w-full z-10 inset-0 overflow-y-auto">
+            <div class="w-full flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold">Error</h2>
+                </div>
+                <div class="mb-4">
+                    <p><?= $msg["payment"] ?></p>
+                </div>
+                <div class="text-right">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">
+                    Subhanallah
+                    </button>
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>  
+    <?php elseif($error) : ?>  
+                <div class="w-full h-screen overflow-hidden flex justify-center items-center fixed bg-slate-200 bg-opacity-60 backdrop-blur-md z-50 
+                <?= "block" ?>" id="myModal">
+            <!-- Modal -->
+            <div class="w-full z-10 inset-0 overflow-y-auto">
+            <div class="w-full flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold">Error</h2>
+                </div>
+                <div class="mb-4">
+                    <p>Transaksi pembayaran gagal</p>
+                </div>
+                <div class="text-right">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="closeModal()">
+                    Subhanallah
+                    </button>
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>  
+    <?php endif ?>
   <div class="flex w-full box-border">
     <!-- Sidebar -->
     <div class="bg-gray-800 w-64 h-screen fixed left-0 top-0 text-gray-100">
@@ -77,7 +139,7 @@ $page = "payment";
         <ul class="w-full flex flex-col gap-4">
           <li class="mb-4"><a href="index.php" class="hover:text-gray-300 <?= ($page === "index" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Dashboard</a></li>
           <li class="mb-4"><a href="pembayaran.php" class="hover:text-gray-300 <?= ($page === "payment" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Pembayaran</a></li>
-          <li class="mb-4"><a href="" class="hover:text-gray-300 <?= ($page === "report" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Laporan</a></li>
+          <li class="mb-4"><a href="payment-history.php" class="hover:text-gray-300 <?= ($page === "report" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Laporan</a></li>
         </ul>
         <div class="flex-wrap flex h-full items-end">
             <form action="" method="post">
@@ -103,6 +165,9 @@ $page = "payment";
                     NISN siswa
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nisn" name="nisn" type="text" placeholder="Masukkan nama lengkap">
+                <?php if(isset($msg["nisn"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $msg["nisn"] ?></p>
+                <?php endif ?>
                 </div>
 
                 <div class="flex flex-col gap-2">
@@ -110,6 +175,9 @@ $page = "payment";
                     Jumlah Pembayaran
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_bayar" name="jumlah_bayar" type="text" placeholder="Masukkan jumlah pembayaran">
+                <?php if(isset($msg["pembayaran"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $msg["pembayaran"] ?></p>
+                <?php endif ?>
                 </div>
 
                 <div class="flex flex-col gap-2">
@@ -120,6 +188,9 @@ $page = "payment";
                     <span class="sr-only">Choose File</span>
                     <input type="file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100" name="bukti_pembayaran"/>
                 </label>
+                <?php if(isset($msg["bukti_pembayaran"])) : ?>
+                    <p class="px-1 text-xs italic text-red-700"><?= $msg["bukti_pembayaran"] ?></p>
+                <?php endif ?>
                 </div>
                 <div class="flex items-center justify-between">
                 <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" name="bayar">
@@ -187,5 +258,6 @@ $page = "payment";
       mainContent.style.marginLeft = newSidebarWidth + 'px';
     });
   </script>
+  <script src="../../public/js/script.js"></script>
 </body>
 </html>

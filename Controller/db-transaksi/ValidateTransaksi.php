@@ -1,10 +1,19 @@
 <?php
+$db = new Database;
+$connection = $db->getConnection();
 class ValidateTransaksi {
     private $error = [];
 
     public function checkNisn($nisn) {
+        global $connection;
+        $year = date('Y');
+        $query = $connection->query("SELECT * FROM transaksi WHERE nisn='$nisn' AND tahun_bayar='$year' limit 1");
+        $result = $query->num_rows;
         if(empty($nisn)) {
             $this->addError('nisn', 'nisn wajib diisi');
+            return false;
+        } else if($result > 0) {
+            $this->addError('payment', 'siswa sudah membayar tagihan spp');
             return false;
         }
         return true;

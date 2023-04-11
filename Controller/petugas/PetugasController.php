@@ -42,7 +42,33 @@ class PetugasController extends ValidatePetugasController{
     }
 
     
-    public function transactionReport($id) {
+    public function transactionReportStat($id) {
+        global $connect;
+        $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp WHERE transaksi.id_petugas=$id ORDER BY id_transaksi DESC limit 3";
+        $result = $connect->query($query);
+        $transaksi = [];
+
+        while($data = $result->fetch_assoc()) {
+            $transaksi[] = $data;
+        }
+
+        return $transaksi;
+    }
+
+    public function transactionReport($id, $start, $limit) {
+        global $connect;
+        $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp WHERE transaksi.id_petugas=$id ORDER BY id_transaksi DESC limit $start,$limit";
+        $result = $connect->query($query);
+        $transaksi = [];
+
+        while($data = $result->fetch_assoc()) {
+            $transaksi[] = $data;
+        }
+
+        return $transaksi;
+    }
+
+    public function transactionReportAll($id) {
         global $connect;
         $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp WHERE transaksi.id_petugas=$id";
         $result = $connect->query($query);
@@ -59,6 +85,12 @@ class PetugasController extends ValidatePetugasController{
         session_destroy();
         header("Location: {$location}");
     }
+    
+        public function convertRupiah($angka){
+            
+            $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+            return $hasil_rupiah;
+        
+        }
 }
-
 ?>

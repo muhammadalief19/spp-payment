@@ -27,7 +27,7 @@ switch ($user["role"]) {
 }
 // authentication
 
-$transaksi = $PetugasController->transactionReport($user["id"]);
+$transaksi = $PetugasController->transactionReportStat($user["id"]);
 
 // logout
 if(isset($_POST["logout"])) {
@@ -63,7 +63,7 @@ $page = "index";
             <a href="pembayaran.php" class="hover:text-gray-300 <?= ($page === "payment" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Pembayaran</a>
           </li>
           <li class="mb-4">
-            <a href="" class="hover:text-gray-300 <?= ($page === "report" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Laporan</a>
+            <a href="payment-history.php" class="hover:text-gray-300 <?= ($page === "report" ? "border-b-2" : "hover:border-b-2 trensition-all duration-200 ease-in-out") ?>">Laporan</a>
         </li>
         </ul>
         <div class="flex-wrap flex h-full items-end">
@@ -205,5 +205,6 @@ $page = "index";
 
     
   </script>
+  <script src="../../public/js/script.js"></script>
 </body>
 </html>
