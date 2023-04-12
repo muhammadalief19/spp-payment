@@ -1,15 +1,15 @@
 <?php
 session_start();
-
 if(!isset($_SESSION["login"])) {
-  header("Location:login.php");
+    header("Location:login.php");
 }
 
 require_once"../Controller/siswa/SiswaController.php";
 
 $SiswaController = new SiswaController;
 $userAuth = $SiswaController->userAuth();
-
+$siswa = $SiswaController->getSiswaAuth($userAuth["nisn"]);
+$transaksi = $SiswaController->checkPembayaran($userAuth["nisn"]);
 switch ($userAuth["role"]) {
     case 'admin':
         # code...
@@ -27,6 +27,20 @@ switch ($userAuth["role"]) {
         break;
 }
 
+$msg = '';
+
+if(isset($_POST["payment"])) {
+    $pay = $SiswaController->sppPayment($_POST, $userAuth["nisn"]);
+
+    if($pay > 0) {
+      header("Location: payment-success.php");
+    } else {
+      $msg = $SiswaController->getError();
+      echo"gagal";
+      var_dump($_POST);
+    }
+}
+
 // logout
 if(isset($_POST["logout"])) {
     $SiswaController->logout("login.php");
@@ -40,7 +54,6 @@ if(isset($_POST["logout"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="../dist/output.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
@@ -114,62 +127,40 @@ if(isset($_POST["logout"])) {
     </div>
     </div>
     </nav>
-    <!-- hero section -->
-    <section class="w-full h-screen flex justify-center items-center py-20">
-        <div class="w-4/5 grid grid-cols-2">
-            <div class="w-full">
-                <img src="../public/assets/3d-illustration-11 - Copy.png" alt="" class="animate-floating">
-            </div>
-            <div class="w-full flex flex-col h-auto justify-center gap-10">
-                <p class="text-2xl font-bold">
-                  Bayar SPP
-                </p>
-                <p class="text-lg font-light">
-                Selamat datang di sistem pembayaran SPP kami! Nikmati kemudahan dan kecepatan dalam melakukan pembayaran SPP dengan platform kami.Waktu membayar SPP tidak perlu repot lagi, cukup dengan beberapa klik saja, SPP kamu sudah terbayar. Ayo mulai gunakan sistem pembayaran SPP kami untuk kepraktisan dalam urusan keuanganmu.
-                </p>
-                <div class="w-full flex justify-end">
-                    <button class="px-7 py-2 bg-gradient-to-r from-sky-700 text-white font-semibold rounded-lg">
-                        Bayar Sekarang
-                    </button>
-                </div>
-            </div>
+    
+    <section class="w-full h-screen py-20 flex items-center justify-center">
+    <div class="w-1/3 mx-auto shadow-2xl p-7 bg-sky-200 text-gray-700 rounded-lg">
+  <h1 class="text-2xl font-bold mb-4">Form Pembayaran</h1>
+  <form action="#" method="post" class=" shadow-inner" enctype="multipart/form-data">
+        <input type="hidden" name="jumlah_bayar" value="<?= $siswa["nominal"] ?>">
+        <input type="hidden" name="id_spp" value="<?= $siswa["id_spp"] ?>">
+
+        <div class="mb-4 flex flex-col gap-2">
+        <label class="block text-gray-700 font-bold mb-2" for="jumlah_bayar">Jumlah Pembayaran</label>
+        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_bayar" type="number" placeholder="Masukkan jumlah pembayaran" value="<?= $siswa["nominal"] ?>" disabled>
         </div>
+        <div class="mb-4">
+        <label for="bukti_pembayaran" class="block text-gray-700 font-bold mb-2">Bukti Pembayaran</label>
+        <label class="block">
+            <span class="sr-only">Choose File</span>
+            <input type="file" id="bukti_pembayaran" name="bukti_pembayaran" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+            <?php if(isset($msg["bukti_pembayaran"])) : ?>
+            <p class="px-1 text-xs italic text-red-700">
+              <?= $msg["bukti_pembayaran"] ?>
+            </p>
+            <?php endif ?>
+        </label>
+        </div>
+        <?php if($transaksi): ?>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" name="payment">Bayar</button>
+        <?php else : ?>
+        <span class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"name="payment">Sudah Bayar</span>
+        <?php endif; ?>
+
+    </form>
+    </div>
+
     </section>
-    <!-- hero section -->
-
-    <!-- section menu -->
-    <section class="w-full h-screen flex flex-col gap-8 justify-center items-center py-10">
-      <p class="text-4xl font-bold">Menu</p>
-    <!-- Slider main container -->
-  <div class="swiper w-1/5 aspect-square shadow-2xl">
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper w-full h-full">
-    <!-- Slides -->
-    <div class="swiper-slide w-full h-full rounded shadow-inner flex justify-center items-center">
-      <a href="pembayaran.php" class=" flex flex-col items-center justify-center gap-7">
-      <img src="../public/assets/3d-illustration-12.png" alt="" class="w-2/3">
-      <p class="text-2xl font-bold">Pembayaran</p>
-      </a>
-    </div>
-    <div class="swiper-slide w-full h-full rounded shadow-inner flex flex-col items-center justify-center gap-7">
-      <a href="" class=" flex flex-col items-center justify-center gap-7">
-      <img src="../public/assets/3d-illustration-13.png" alt="" class="w-2/3">
-      <p class="text-2xl font-bold">My SPP</p>
-      </a>
-    </div>
-    <div class="swiper-slide w-full h-full rounded shadow-inner flex flex-col items-center justify-center gap-7">
-      <a href="riwayat-transaksi.php" class=" flex flex-col items-center justify-center gap-7">
-      <img src="../public/assets/3d-illustration-14.png" alt="" class="w-2/3">
-      <p class="text-2xl font-bold">History Pembayaran</p>
-      </a>
-    </div>
-  </div>
-  <!-- If we need pagination -->
-  <div class="swiper-pagination"></div>
-
-</div>
-</section>
-    <!-- section menu -->
 
     <!-- footer -->
     <footer class="bg-gray-900 text-white py-8">
@@ -199,29 +190,5 @@ if(isset($_POST["logout"])) {
 
     <!-- footer -->
     <script src="../public/js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <script>
-      const swiper = new Swiper('.swiper', {
-        // Optional parameters
-        direction: 'vertical',
-        loop: false,
-
-        // If we need pagination
-        pagination: {
-          el: '.swiper-pagination',
-        },
-
-        // Navigation arrows
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-
-        // And if we need scrollbar
-        scrollbar: {
-          el: '.swiper-scrollbar',
-        },
-      });
-    </script>
 </body>
 </html>

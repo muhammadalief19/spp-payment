@@ -140,9 +140,8 @@ $page = "report";
                   <div class="bg-white rounded-lg shadow-lg overflow-hidden w-1/3 relative aspect-square">
                     <!-- Image container -->
                     <div class="relative w-full">
-                      <img src="../../public/assets/bukti-pembayaran/<?= $data["bukti_pembayaran"] ?>" alt="Preview Image" class="w-full object-cover">
+                      <img src="../../public/assets/bukti-pembayaran/<?= $data["bukti_pembayaran"] ?>" alt="<?= $data["bukti_pembayaran"] ?>" class="w-full object-cover">
                     </div>
-
                     <!-- Close button -->
                     <button class="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700 focus:outline-none" id="modal-close">
                       <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20">
@@ -198,6 +197,7 @@ $page = "report";
             <p class="text-center text-sm">&copy; 2023 SMKN 1 Kreal. All Rights Reserved.</p>
         </div>
     </footer>
+    </div>
     </div>
   
 
