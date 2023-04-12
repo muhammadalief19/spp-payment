@@ -80,7 +80,15 @@ class SiswaController extends Validate {
 
     public function getSiswaAuth($nisn) {
         global $connect;
-        $query = "SELECT * FROM siswa JOIN spp ON siswa.id_spp = spp.id_spp JOIN kelas ON siswa.id_kelas = kelas.id_kelas JOIN transaksi ON siswa.nisn = transaksi.nisn WHERE siswa.nisn='$nisn'";
+        $query = "SELECT * FROM siswa JOIN spp ON siswa.id_spp = spp.id_spp JOIN kelas ON siswa.id_kelas = kelas.id_kelas WHERE siswa.nisn=$nisn";
+        $siswa = $connect->query($query);
+
+        return $siswa->fetch_assoc();
+    }
+
+    public function getSiswaAuthLunas($nisn) {
+        global $connect;
+        $query = "SELECT * FROM siswa JOIN spp ON siswa.id_spp = spp.id_spp JOIN kelas ON siswa.id_kelas = kelas.id_kelas JOIN transaksi ON siswa.nisn = transaksi.nisn WHERE siswa.nisn=$nisn";
         $siswa = $connect->query($query);
 
         return $siswa->fetch_assoc();

@@ -13,7 +13,7 @@ $transaksi = $SiswaController->checkPembayaran($userAuth["nisn"]);
 switch ($userAuth["role"]) {
     case 'admin':
         # code...
-        header("Location: ../admin/index.php");
+        header("Location: admin/index.php");
         break;
     case 'petugas':
         header("Location: petugas/index.php");
@@ -132,12 +132,11 @@ if(isset($_POST["logout"])) {
     <div class="w-1/3 mx-auto shadow-2xl p-7 bg-sky-200 text-gray-700 rounded-lg">
   <h1 class="text-2xl font-bold mb-4">Form Pembayaran</h1>
   <form action="#" method="post" class=" shadow-inner" enctype="multipart/form-data">
-        <input type="hidden" name="jumlah_bayar" value="<?= $siswa["nominal"] ?>">
         <input type="hidden" name="id_spp" value="<?= $siswa["id_spp"] ?>">
 
         <div class="mb-4 flex flex-col gap-2">
         <label class="block text-gray-700 font-bold mb-2" for="jumlah_bayar">Jumlah Pembayaran</label>
-        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_bayar" type="number" placeholder="Masukkan jumlah pembayaran" value="<?= $siswa["nominal"] ?>" disabled>
+        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jumlah_bayar" type="number" name="jumlah_bayar" placeholder="Masukkan jumlah pembayaran"">
         </div>
         <div class="mb-4">
         <label for="bukti_pembayaran" class="block text-gray-700 font-bold mb-2">Bukti Pembayaran</label>

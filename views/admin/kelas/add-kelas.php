@@ -91,7 +91,7 @@ if(isset($_POST["logout"])) {
         <div class="w-full flex items-center justify-center min-h-screen p-4">
             <div class="bg-white w-1/4 rounded-lg shadow-lg p-6">
             <div class="mb-4">
-                <h2 class="text-xl font-bold">Error/h2>
+                <h2 class="text-xl font-bold">Error</h2>
             </div>
             <div class="mb-4">
                 <p><?= (isset($message["data"])) ? $message["data"] : "Kelas gagal ditambah" ?></p>
@@ -119,7 +119,7 @@ if(isset($_POST["logout"])) {
                 <a href="../index.php" class="">Dashboard</a>
             </li>
             <li class="">
-                <a href="" class="">Transaksi</a>
+                <a href="../transaksi/transaksi.php" class="">Transaksi</a>
             </li>
             <li class="">
                 <a href="../petugas/petugas.php" class="">Petugas</a>

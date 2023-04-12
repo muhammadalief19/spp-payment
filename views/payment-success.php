@@ -1,3 +1,37 @@
+<?php
+session_start();
+
+if(!isset($_SESSION["login"])) {
+  header("Location:login.php");
+}
+
+require_once"../Controller/siswa/SiswaController.php";
+
+$SiswaController = new SiswaController;
+$userAuth = $SiswaController->userAuth();
+
+switch ($userAuth["role"]) {
+    case 'admin':
+        # code...
+        header("Location: admin/index.php");
+        break;
+    case 'petugas':
+        header("Location: petugas/index.php");
+    break;
+
+    case 'siswa':
+    break;
+            
+        default:
+            # code...
+        break;
+}
+
+// logout
+if(isset($_POST["logout"])) {
+    $SiswaController->logout("login.php");
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

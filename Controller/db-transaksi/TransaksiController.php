@@ -92,4 +92,55 @@ class TransaksiController extends ValidateTransaksi {
                     
                         return $namaFileBaru;
                     }
+
+    public function transactionAll() {
+        global $connection;
+        $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp";
+
+        $result = $connection->query($query);
+        $transaksi = [];
+        while($data = $result->fetch_assoc()) {
+            $transaksi[] = $data;
+        }
+
+        return $transaksi;
+    }
+
+    public function transactions($start, $limit) {
+        global $connection;
+        $query = "SELECT * FROM transaksi JOIN siswa ON transaksi.nisn = siswa.nisn JOIN petugas ON transaksi.id_petugas = petugas.id_petugas JOIN spp ON transaksi.id_spp = spp.id_spp limit $start,$limit";
+
+        $result = $connection->query($query);
+        $transaksi = [];
+        while($data = $result->fetch_assoc()) {
+            $transaksi[] = $data;
+        }
+
+        return $transaksi;
+    }
+
+    public function findBukti($id) {
+        global $connection;
+        $query = "SELECT * FROM transaksi WHERE id_transaksi=$id";
+        $result = $connection->query($query);
+        $transaksi = $result->fetch_assoc();
+
+        return $transaksi["bukti_pembayaran"];
+    }
+
+    public function terimaTransaksi($id) {
+        global $connection;
+        $query = "UPDATE transaksi set status='disetujui' WHERE id_transaksi=$id";
+        $connection->query($query);
+
+        return $connection->affected_rows;
+    }
+
+    public function tolakTransaksi($id) {
+        global $connection;
+        $query = "UPDATE transaksi set status='ditolak' WHERE id_transaksi=$id";
+        $connection->query($query);
+
+        return $connection->affected_rows;
+    }
 }

@@ -8,12 +8,12 @@ require_once"../Controller/siswa/SiswaController.php";
 
 $SiswaController = new SiswaController;
 $userAuth = $SiswaController->userAuth();
-$siswa = $SiswaController->getSiswaAuth($userAuth["nisn"]);
+$siswa = $SiswaController->getSiswaAuthLunas($userAuth["nisn"]);
 $transaksi = $SiswaController->checkPembayaran($userAuth["nisn"]);
 switch ($userAuth["role"]) {
     case 'admin':
         # code...
-        header("Location: ../admin/index.php");
+        header("Location: admin/index.php");
         break;
     case 'petugas':
         header("Location: petugas/index.php");

@@ -140,7 +140,7 @@ $page = "report";
                   <div class="bg-white rounded-lg shadow-lg overflow-hidden w-1/3 relative aspect-square">
                     <!-- Image container -->
                     <div class="relative w-full">
-                      <img src="../../public/assets/bukti-pembayaran/<?= $data["bukti_pembayaran"] ?>" alt="<?= $data["bukti_pembayaran"] ?>" class="w-full object-cover">
+                      <img src="../../public/assets/bukti-pembayaran/<?= $TransaksiController->findBukti($data["id_transaksi"]) ?>" alt="<?= $data["bukti_pembayaran"] ?>" class="w-full object-cover">
                     </div>
                     <!-- Close button -->
                     <button class="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700 focus:outline-none" id="modal-close">

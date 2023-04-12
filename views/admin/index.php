@@ -57,7 +57,7 @@ if(isset($_POST["logout"])) {
                 <a href="index.php" class="">Dashboard</a>
             </li>
             <li class="">
-                <a href="" class="">Transaksi</a>
+                <a href="transaksi/transaksi.php" class="">Transaksi</a>
             </li>
             <li class="">
                 <a href="petugas/petugas.php" class="">Petugas</a>
@@ -115,7 +115,7 @@ if(isset($_POST["logout"])) {
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-7.png" alt="" class="">  
-                <a href="" class="text-lg font-semibold hover:text-gray-500">History transaksi</a href="">
+                <a href="transaksi/transaksi.php" class="text-lg font-semibold hover:text-gray-500">History transaksi</a href="">
             </li>
             <li class="glide__slide rounded-md shadow-md box-border p-6 flex-col gap-2 aspect-square border-[3px] flex justify-center items-center"> 
                 <img src="../../public/assets/3d-illustration-8.png" alt="" class="">  

@@ -13,7 +13,7 @@ $userAuth = $SiswaController->userAuth();
 switch ($userAuth["role"]) {
     case 'admin':
         # code...
-        header("Location: ../admin/index.php");
+        header("Location: admin/index.php");
         break;
     case 'petugas':
         header("Location: petugas/index.php");
